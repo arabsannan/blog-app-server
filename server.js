@@ -14,6 +14,7 @@ const apolloServer = async (typeDefs, resolvers) => {
     typeDefs,
     resolvers,
     introspection: true,
+    playground: true,
     context: { Blog },
   });
 

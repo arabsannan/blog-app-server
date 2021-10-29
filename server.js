@@ -13,6 +13,7 @@ const apolloServer = async (typeDefs, resolvers) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
     context: { Blog },
   });
 
@@ -21,7 +22,7 @@ const apolloServer = async (typeDefs, resolvers) => {
   port = process.env.PORT;
   app.listen(port || 5000, () => {
     console.log("Listeninggg");
-    
+
     console.log(
       `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
     );

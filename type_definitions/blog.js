@@ -1,11 +1,10 @@
 const { gql } = require("apollo-server-express");
 
-//added the id in here its best to query by id not title to be able to delete
 const typeDefs = gql`
   type Comment {
-    id: ID
+    id: ID!
     text: String
-    date: String
+    blog: ID!
   }
 
   type Blog {
@@ -13,7 +12,7 @@ const typeDefs = gql`
     title: String!
     body: String!
     author: String
-    comments: [String]
+    comments: [ID]
   }
 
   input BlogInput {
@@ -21,16 +20,24 @@ const typeDefs = gql`
     body: String
   }
 
+  input AuthorInput {
+    name: String!
+    description: String
+  }
+
   type Query {
     blogs: [Blog]!
-    blog(title: String!): Blog
+    blog(id: ID!, title: String!): Blog
+    comments(blog: ID!): [Comment]
+    comment(id: ID!, blog: ID!): Comment
   }
 
   type Mutation {
-    createBlog(title: String!, body: String!, author: String): Blog
+    createBlog(title: String!, body: String!, author: AuthorInput): Blog
     deleteBlog(title: String): String
     updateBlog(id: ID, blog: BlogInput): Blog
-    addComment(text: String): Comment
+    addComment(blog: ID!, text: String!): Comment
+    deleteComment(id: ID!, blog: ID!): String
   }
 `;
 

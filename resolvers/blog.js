@@ -1,13 +1,19 @@
 const { Blog } = require("../models/blog");
+const { Comment } = require("../models/comment");
 
 const resolvers = {
   Query: {
-    //had to do with mongodb find({}) queries all the objects
+    //  Using mongodb find({}) queries all the objects
     blogs: async () => Blog.find({}),
-    blog: async (parent, args) => Blog.findOne({ title: args.title }),
+    blog: async (parent, args) =>
+      Blog.findOne({ id: args.id, title: args.title }),
+    comments: async (parent, args) => Comment.find({blog: args.blog }),
+    comment: async (parent, args) =>
+      Comment.findOne({ id: args.id, blog: args.blog }),
   },
 
   Mutation: {
+    // Mutation for Blog
     createBlog: async (_, args) => {
       let post = new Blog(args);
       post.save();
@@ -32,6 +38,18 @@ const resolvers = {
       }
       const post = await Blog.findByIdAndUpdate(id, update, { updated: true });
       return post;
+    },
+
+    //Mutation for Comments
+    addComment: async (_, args) => {
+      let comment = new Comment(args);
+      comment.save();
+      return comment;
+    },
+    deleteComment: async (_, args) => {
+      const { id, blog } = args;
+      await Comment.findOneAndDelete({ id: id, blog: blog });
+      return `Comment with: '${id}' is deleted`;
     },
   },
 };

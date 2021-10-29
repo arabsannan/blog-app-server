@@ -10,15 +10,19 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  author: String,
+  author: { name: { type: String, required: true }, description: String },
   date: {
     type: Date,
     default: Date.now,
   },
-  comments: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Comment",
-  }],
+  banner: { data: Buffer, contentType: String },
+  likes: { type: Number, default: 0 },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
 });
 
 // Compiling a Blog model

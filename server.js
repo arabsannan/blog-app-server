@@ -21,11 +21,10 @@ const apolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app, path: "/" });
   port = process.env.PORT;
+
   app.listen(port || 5000, () => {
     console.log("Listeninggg");
-
     console.log(
-      // `🚀 Server ready at ${url}`
       `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
     );
   });
